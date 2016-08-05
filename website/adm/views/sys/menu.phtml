@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <?php
+        $this->load->view('/public/linker',array(
+            'css'=>array(),
+            'js' =>array(),
+        ));
+    ?>
+</head>
+<body>
+    <table id="dg" class="easyui-datagrid" title="应用菜单管理"
+           fit="true" border="false" plain="true"
+           url="<?php echo base_url('sys/menu/get?actionxm=search')?>" method="post"
+           toolbar="#toolbar" multiSort="true"
+           rownumbers="false" pagination="false"
+           singleSelect="true" remote>
+        <thead>
+            <tr>
+                <th data-options="sortable:true,field:'menu_id',width:80">菜单ID</th>
+                <th data-options="sortable:true,field:'title',width:200" formatter="format_title">菜单标题</th>
+                <th data-options="sortable:true,field:'ctrl_name',width:200">控制器</th>
+                <th data-options="sortable:true,field:'sort',width:80">排序</th>
+                <th data-options="sortable:true,field:'create_uname',width:120">创建账号</th>
+                <th data-options="sortable:true,field:'create_time',width:200">创建时间</th>
+            </tr>
+        </thead>
+    </table>
+
+    <div id="toolbar">
+        <button class="easyui-linkbutton" iconCls="icon-add"    plain="true" onclick="open_insert()">添加</button>
+        <button class="easyui-linkbutton" iconCls="icon-cancel" plain="true" onclick="do_delete()">删除</button>
+        <button class="easyui-linkbutton" iconCls="icon-edit"   plain="true" onclick="open_update()">修改</button>
+    </div>
+
+    <?php $this->load->view('sys/menu_edit');?>
+
+    <script type="text/javascript">
+    function format_title(value,row){
+        if(row.level>0){
+            return '<span style="display:inline-block;padding-left:'+(20*row.level)+'px">|-'+value+'</span>';
+        }else{
+            return value;
+        }
+    }
+    function reload_pmenu(){
+        var dg_rows=$('#dg').datagrid('getRows');
+        var options='<option value="0">---无---</option>';
+        var title='';
+        for(var x in dg_rows){
+            title=dg_rows[x].title;
+            if(dg_rows[x].level>0){
+                title=(new Array(dg_rows[x].level+1).join('&nbsp;&nbsp;&nbsp;&nbsp;'))+'|-'+title;
+            }
+            options+='<option value="'+dg_rows[x].menu_id+'">'+title+'</option>';
+        }
+        $('#combo_pmenu').html(options);
+    }
+    /*添加 和 修改操作*/
+    function open_insert(){
+        reload_pmenu();
+        $('#fm-edit').form('clear').form('load',{actionxm:'insert',menu_id:'系统编号',pid:0});
+        $('#dlg-edit').dialog('setTitle','菜单添加').dialog('open');
+    }
+    function open_update(){
+        reload_pmenu();
+        var info=$('#dg').datagrid('getSelected');
+        if(info==null){
+            $.messager.alert('操作提示','请选择需要编辑的菜单!','warning');
+            return;
+        }
+        var fm_data={
+                actionxm :'update',
+                menu_id  :info.menu_id,
+                pid      :info.pid,
+                title    :info.title,
+                url      :info.url,
+                ctrl_name:info.ctrl_name,
+                sort     :info.sort
+        };
+        $('#fm-edit').form('load',fm_data);
+        $('#dlg-edit').dialog('setTitle','菜单编辑').dialog('open');
+    }
+    function do_save(){
+        $('#fm-edit').form('submit',{
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if (result.success==false){
+                    $.messager.alert('操作提示',result.data,'warning');
+                } else {
+                    $('#dlg-edit').dialog('close');
+                    $('#dg').datagrid('reload');
+                }
+            }
+        });
+    }
+    /*删除操作*/
+    function do_delete(){
+        var info=$('#dg').datagrid('getSelected');
+        if(info==null){
+            $.messager.alert('操作提示','请选择需要删除的菜单!','warning');
+            return;
+        }
+        $.messager.confirm('操作提示','你确定要删除此应用菜单吗?',function(r){
+            if (r){
+                $.post('<?php echo base_url('sys/menu/post')?>',{menu_id:info.menu_id,actionxm:'delete'},function(result){
+                    if (result.success){
+                        $('#dg').datagrid('reload');
+                    } else {
+                        $.messager.alert('操作提示','删除成功');
+                    }
+                },'json');
+            }
+        });
+    }
+    </script>
+</body>
+</html>

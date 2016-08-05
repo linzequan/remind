@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <?php
+        $this->load->view('/public/linker',array(
+            'css'=>array(),
+            'js' =>array(),
+        ));
+        $ctrl_url = base_url('sys/log');
+    ?>
+    <style>
+    .split-line {
+        color: #ccc;
+    }
+    .datagrid-sort-asc .datagrid-sort-icon, .datagrid-sort-desc .datagrid-sort-icon {
+        padding: 0px;
+    }
+    .tip {
+        color: #337ab7;
+    }
+    </style>
+</head>
+<body>
+    <table id="dg" class="easyui-datagrid" title="日志管理"
+           fit="true" border="false" plain="true"
+           multiSort="true"
+           rownumbers="false" pagination="true" pageList="[50,100,150,200]" pageSize="50"
+           singleSelect="true" remote>
+        <thead>
+            <tr>
+                <th data-options="sortable:true,field:'time',width:130">时间</th>
+                <th data-options="sortable:true,field:'user_name',width:80">用户名</th>
+                <th data-options="sortable:true,field:'query_sql',width:1200">执行语句</th>
+            </tr>
+        </thead>
+    </table>
+    <script type="text/javascript">
+    $(function() {
+        window.setTimeout(function() {
+            var obj = new Object();
+            obj.actionxm = 'search';
+            obj.rs = $('#fm-search').form('getData');
+            $('#dg').datagrid({
+                url: "<?php echo $ctrl_url.'/get'?>",
+                method: "post",
+                queryParams: obj
+            });
+        }, 100);
+    })
+    </script>
+</body>
+</html>

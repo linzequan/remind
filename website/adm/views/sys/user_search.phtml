@@ -1,0 +1,32 @@
+<div id="dlg-search" class="easyui-dialog" style="width:360px;height:200px;padding:10px 20px"
+    closed="true" buttons="#dlg-search-buttons" title="用户查询">
+    <form id="fm-search" method="post" novalidate>
+        <table class="fm-table" cellpadding="4px">
+            <colgroup>
+                <col width="80px" /><col width="*" />
+            </colgroup>
+            <tr>
+                <td>用户账号:</td>
+                <td><input class="text" name="user_name"></td>
+            </tr>
+            <tr>
+                <td>真实姓名:</td>
+                <td><input class="text" name="true_name"></td>
+            </tr>
+            <tr>
+                <td>是否管理员:</td>
+                <td>
+                <select name="is_admin">
+                    <option value="">所有</option>
+                    <option value="0">普通用户</option>
+                    <option value="1">超级管理员</option>
+                </select>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div id="dlg-search-buttons">
+    <button class="easyui-linkbutton" iconCls="icon-ok" onclick="do_search()" style="width:90px">确定</button>
+    <button class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg-search').dialog('close')" style="width:90px">取消</button>
+</div>

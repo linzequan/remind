@@ -1,0 +1,57 @@
+.title {
+    line-height: 28px;
+}
+.time {
+    font: 13px/24px "microsoft yahei";
+    color: #666;
+}
+.survey {
+    border-top: 1px solid #e3e3e3;
+    margin-top: 24px;
+    font: 13px/24px "microsoft yahei";
+}
+.survey h3 {
+    font-size: 18px;
+    margin: 26px 0 0;
+    color: #222;
+    font-family: "microsoft yahei";
+    font-weight: normal;
+}
+div.survey .survey-list {
+    padding-right: 10px;
+}
+.survey-list {
+    padding: 12px 0 10px 28px;
+    line-height: 18px;
+}
+div.survey .survey-list li {
+    padding-bottom: 9px;
+}
+.survey-list li {
+    padding: 5px 0;
+    overflow: hidden;
+    clear: both;
+    zoom: 1;
+}
+.chose-text {
+    float: left;
+    width: 265px;
+    padding-right: 40px;
+}
+.bar-box {
+    display: inline-block;
+    width: 150px;
+    height: 14px;
+    margin: 0 10px 0 0;
+    vertical-align: middle;
+    overflow: hidden;
+    background-color: #eaeaea;
+}
+.bar-box i {
+    display: block;
+    background-color: #ff903e;
+    border-right: 1px solid #fff;
+}
+.imp {
+    color: #ff8022 !important;
+}

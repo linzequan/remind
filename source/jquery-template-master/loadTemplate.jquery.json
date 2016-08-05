@@ -1,0 +1,26 @@
+{
+    "name": "loadTemplate",
+    "title": "jQuery Templating",
+    "description": "jQuery plugin for loading and using templates. The plugin is designed to be simple yet powerful, and supports loading templates from within the page, or using AJAX to load html files.",
+    "keywords": [
+        "templates",
+        "templating"
+    ],
+    "version": "1.4.4",
+    "author": {
+        "name": "Paul Burgess and other contributors",
+        "url": "https://github.com/codepb/jquery-template"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://github.com/codepb/jquery-template/blob/master/MIT-LICENSE.txt"
+        }
+    ],
+    "bugs": "https://github.com/codepb/jquery-template/issues",
+    "homepage": "https://github.com/codepb/jquery-template",
+    "docs": "https://github.com/codepb/jquery-template#jqueryloadtemplate",
+    "dependencies": {
+        "jquery": ">=1.8"
+    }
+}

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <?php $this->load->view('/public/linker');?>
+    <style type="text/css">
+    #panel_top{
+        height:50px;
+        background-color:#2C5992;
+        overflow:hidden;
+    }
+    #panel_top *{color:#FFFFFF;}
+    #panel_top .logo,
+    #panel_top .user_info{
+        display:inline-block;
+        margin:0;
+        height:48px;
+        line-height:48px;
+    }
+    #panel_top .logo{
+        float:left;
+        padding-left:10px;
+        text-align:left;
+        font-size:20px;
+        font-weight:bold;
+    }
+    #panel_top .user_info{
+        float:right;
+        padding-right:10px;
+        text-align:right;
+        font-size:12px;
+    }
+    #panel_top a{
+        text-decoration:none;
+    }
+    .tabs-header, .tabs-tool {
+        background-color: #e0ecff;
+    }
+    .panel-body {
+        overflow: hidden;
+    }
+    </style>
+</head>
+<?php
+$host = 'http://' . $_SERVER['HTTP_HOST'] . '/';
+function display_treeview($app_menu,$pid){
+    if($pid>0) echo '<ul>';
+    foreach($app_menu as $item){
+        if($item['pid']==$pid){
+            echo '<li>';
+            if($item['is_leaf']==false){
+                echo '<span>'.$item['title'].'</span>';
+            }else{
+                echo '<a url="'.base_url($item['ctrl_name']).'" pos="#'.str_replace('/','-',$item['ctrl_name']).'">'.$item['title'].'</a>';
+            }
+            display_treeview($app_menu,$item['menu_id']);
+            echo '</li>';
+        }
+    }
+    if($pid>0) echo '</ul>';
+}
+?>
+<body class="easyui-layout">
+    <!-- 顶部 -->
+    <div data-options="region:'north'" id="panel_top">
+        <p class="logo">知识产权提醒系统</p>
+        <p class="user_info">
+            <span><?php echo $this->session->userdata('user_name').'('.$this->session->userdata('true_name').')'?></span>
+            <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+            <a href="#this" onclick="javascript:open_pwd_update();">修改密码</a>
+            <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+            <a href="<?php echo base_url('login/sign_out')?>">退出</a>
+        </p>
+    </div>
+    <!-- /顶部 -->
+    <!-- 左侧 -->
+    <?php if($this->session->userdata('is_admin')=='1'):?>
+    <div data-options="region:'west',split:true" title="" style="width:250px;overflow:hidden;">
+        <div class="easyui-accordion" fit="true" border="false" plain="true">
+            <!-- 应用菜单 -->
+            <div title="应用菜单" style="overflow:auto;padding:4px;">
+                <ul class="easyui-tree" id="app_menu">
+                <?php display_treeview($app_menu,0);?>
+                </ul>
+            </div>
+            <!-- /应用菜单 -->
+            <!-- 系统菜单 -->
+            <div title="系统菜单" data-options="" style="padding:10px;">
+                <ul class="easyui-tree" id="sys_menu">
+                    <li><a url="<?php echo base_url('/sys/user');?>" pos="#sys-user">系统用户</a></li>
+                    <li><a url="<?php echo base_url('/sys/menu');?>" pos="#sys-menu">应用菜单</a></li>
+                    <li><a url="<?php echo base_url('/sys/pms');?>"  pos="#sys-pms">用户权限</a></li>
+                    <li><a url="<?php echo base_url('/sys/log');?>"  pos="#sys-log">系统日志</a></li>
+                </ul>
+            </div>
+            <!-- /系统菜单 -->
+        </div>
+    </div>
+    <?php else:?>
+    <div data-options="region:'west',split:true" title="应用菜单" style="width:250px;overflow:hidden;">
+        <ul class="easyui-tree" id="app_menu" style="padding:8px;">
+            <?php display_treeview($app_menu,0);?>
+        </ul>
+    </div>
+    <?php endif;?>
+    <!-- /左侧 -->
+    <!-- 主体-->
+    <div data-options="region:'center'" title="" style="overflow:hidden;height:100%;">
+        <div id="panel_center_tabs" class="easyui-tabs" fit="true" border="false" plain="true" tools="#tab-tools">
+            <div title="首页" data-options="iconCls:'',closable:false">
+                <div id="p" class="easyui-panel" border="false" title="Dashboard" style="width:100%;height:100%;padding:10px;">
+
+                </div>
+            </div>
+        </div>
+        <div id="tab-tools">
+            <span class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-cancel'" onclick="javascript:remove_all_tabs();">清空</span>
+        </div>
+    </div>
+    <!-- /主体-->
+    <!-- 密码修改弹窗 -->
+    <div id="dlg-pwd-update" class="easyui-dialog" style="width:320px;height:200px;padding:10px 20px"
+        closed="true" modal="true" buttons="#dlg-edit-buttons" title="修改密码">
+        <form id="fm-pwd-update" method="post" action="<?php echo base_url('home/pwd_update')?>" novalidate>
+            <table class="fm-table" cellpadding="4px">
+                <colgroup>
+                    <col width="80px" /><col width="*" />
+                </colgroup>
+                <tr>
+                    <td>原密码:</td>
+                    <td><input class="text" name="pwd_old" type="password" required="true"></td>
+                </tr>
+                <tr>
+                    <td>新密码:</td>
+                    <td><input class="text" id="pwd_new" name="pwd_new" type="password" required="true"></td>
+                </tr>
+                <tr>
+                    <td>密码确认:</td>
+                    <td><input class="text" id="pwd_comfirn" name="pwd_verify" type="password" required="true"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div id="dlg-edit-buttons">
+        <a href="#this" class="easyui-linkbutton w90" iconCls="icon-ok" onclick="javascript:do_pwd_update();">确定</a>
+        <a href="#this" class="easyui-linkbutton w90" iconCls="icon-cancel" onclick="javascript:$('#dlg-pwd-update').dialog('close')">取消</a>
+    </div>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('.easyui-tree a').click(function(){
+            var url=$(this).attr('url');
+            var txt=$(this).html();
+            if(url==undefined) return;
+            var obj_tabs=$('#panel_center_tabs');
+            var rand = Math.random();
+            if (obj_tabs.tabs('exists',txt)){
+                obj_tabs.tabs('select',txt);
+            }else {
+                obj_tabs.tabs('add',{
+                    title:txt,
+                    border:false,
+                    content:'<iframe _src="'+url+'?'+rand+'" style="width:100%;height:100%;border:0;" frameborder="0"></iframe>',
+                    closable:true
+                });
+                $('iframe[_src="'+url+'?'+rand+'"]').attr('src',url+'?'+rand);
+            }
+            window.location.href=$(this).attr('pos');
+        });
+        (function(){
+            var href=window.location.href;
+            var index=href.indexOf('#');
+            if(index>0){
+                var attr=href.substr(index);
+                var menu=$('.easyui-tree a[pos='+attr+']');
+                if(menu){
+                    menu.trigger('click');
+                }
+            }
+        })();
+    });
+    function open_pwd_update(){
+        $('#dlg-pwd-update').dialog('open');
+    }
+    function do_pwd_update(){
+        $('#fm-pwd-update').form('submit',{
+            onSubmit:function(){
+                var pwd_new     =$('#pwd_new').val();
+                var pwd_comfirn =$('#pwd_comfirn').val();
+                if(pwd_new!=pwd_comfirn){
+                    $.messager.alert('操作提示','密码确认有误');
+                    $('#pwd_comfirn').val('').focus();
+                    return false;
+                }
+            },
+            success:function(data){
+                var result=$.parseJSON(data);
+                if(result['success']){
+                    $('#dlg-pwd-update').dialog('close');
+                }
+                $.messager.alert('操作提示',result['data']);
+            }
+        });
+    }
+    function remove_all_tabs(){
+        var tabs=$('#panel_center_tabs').tabs('tabs');
+        for(var i=0,len=tabs.length;i<=len;i++){
+            $('#panel_center_tabs').tabs('close', 1);
+        }
+    }
+    </script>
+    <!-- /密码修改弹窗 -->
+</body>
+</html>

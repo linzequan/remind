@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <?php
+        $this->load->view('/public/linker',array(
+            'css'=>array(),
+            'js' =>array(),
+        ));
+    ?>
+    <style type="text/css" media="screen">
+        .split-line {
+            color: #ccc;
+        }
+        .datagrid-sort-asc .datagrid-sort-icon, .datagrid-sort-desc .datagrid-sort-icon {
+            padding: 0px;
+        }
+    </style>
+</head>
+<body class="easyui-layout">
+    <div region="west" title="" collapsible="true" split="false" style="width:260px;">
+        <table id="dg-user" class="easyui-datagrid" title="系统用户"
+               fit="true" border="false" plain="true"
+               url="<?php echo base_url('sys/pms/get?actionxm=user-search')?>" method="post"
+               multiSort="false"
+               rownumbers="false" pagination="true" pageSize="50"
+               singleSelect="true">
+            <thead>
+                <tr>
+                    <th data-options="sortable:true,field:'user_name',width:110">会员账号</th>
+                    <th data-options="sortable:true,field:'true_name',width:80">真实姓名</th>
+                    <th data-options="sortable:true,field:'is_admin',width:60">管理员</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div region="center" title="">
+        <table id="dg-menu" class="easyui-datagrid" title="系统菜单"
+               fit="true" border="false" plain="true"
+               url="<?php echo base_url('sys/pms/get?actionxm=menu-search')?>" method="post"
+               toolbar="#toolbar" multiSort="true"
+               rownumbers="false" pagination="false"
+               singleSelect="true">
+            <thead>
+                <tr><!-- 用户权限设置=0:查询,1:增加,2:删除,3:修改,4:特殊 -->
+                    <th data-options="sortable:false,field:'title',width:240" formatter="format_title">菜单标题</th>
+                    <th data-options="sortable:false,field:'ctrl_name',width:220">控制器</th>
+                    <th data-options="field:'select',align:'center',width:60" formatter="format_operate">查询</th>
+                    <th data-options="field:'insert',align:'center',width:60" formatter="format_operate">添加</th>
+                    <th data-options="field:'delete',align:'center',width:60" formatter="format_operate">删除</th>
+                    <th data-options="field:'update',align:'center',width:60" formatter="format_operate">修改</th>
+                    <th data-options="field:'special',align:'center',width:60" formatter="format_operate">特殊</th>
+                    <th data-options="field:'all_choose',align:'center',width:60" formatter="format_all_choose">全选</th>
+                </tr>
+            </thead>
+        </table>
+        <div id="toolbar">
+            <input type="checkbox" id="all" style="vertical-align: middle;">
+            <span style="vertical-align: middle;">所有权限</span>
+            <span class="split-line">|</span>
+            <button class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="do_save()">保存</button>
+        </div>
+    </div>
+    <script type="text/javascript">
+    var cur_user_id=0;
+    function format_title(value,row){
+        if(row.level>0){
+            return '<span style="display:inline-block;padding-left:'+(20*row.level)+'px">|-'+value+'</span>';
+        }else{
+            return value;
+        }
+    }
+    function format_operate(value,row,index,param){
+        //{'select':0,'insert':1,'delete':2,'update':3,'upload':4,'download':5,'check':6,'public':7,'special':8}
+        var fields=<?php echo json_encode($this->config->item('pms_opts'),true)?>;
+        if(row.is_leaf==true){
+            return '<input type="checkbox" class="opt_chk" id="opt-'+row.menu_id+'-'+fields[this.field]+'" pid="'+row.pid+'" />';
+        }else{
+            return '';
+        }
+    }
+    function format_all_choose(value,row,index,param){
+        var fields=<?php echo json_encode($this->config->item('pms_opts'),true)?>;
+        if(row.is_leaf==true){
+            return '<input type="checkbox" class="row_check" pid="'+row.pid+'" onclick="choose_all('+index+')" />';
+        }else{
+            return '';
+        }
+    }
+    $(document).ready(function(){
+
+        $('#dg-user').datagrid({
+            onClickRow:function(rowIndex,rowData){
+                cur_user_id=rowData.user_id
+                $('.opt_chk').each(function(){
+                    $(this).prop('checked',false);
+                });
+                $.post('<?php echo base_url('sys/pms/get?actionxm=search')?>',{user_id:cur_user_id},function(data){
+                    var id='';
+                    var obj_chk=null;
+                    for(var x in data){
+                        for(var y in data[x].pms){
+                            id='#opt-'+data[x].menu_id+'-'+y;
+                            if(data[x].pms[y]=='1'){
+                                $(id).prop('checked',true);
+                            }
+                        }
+                    }
+                },'json');
+            }
+        });
+
+        $('#dg-user').datagrid('getPager').pagination({
+            showPageList:false,
+            displayMsg:''
+        });
+
+        $('#all').click(function() {
+            if($(this).prop('checked')) {
+                $("input[type=checkbox]").prop('checked', true);
+            } else {
+                $("input[type=checkbox]").prop('checked', false);
+            }
+        })
+    });
+
+    function choose_all(e) {
+        if(!$('tr[datagrid-row-index='+e+'] .row_check').prop('checked')) {
+            $('tr[datagrid-row-index='+e+'] input[type=checkbox]').prop('checked', false);
+        } else {
+            $('tr[datagrid-row-index='+e+'] input[type=checkbox]').prop('checked', true);
+        }
+    }
+
+    function do_save(){
+        if(cur_user_id==0){
+            $.messager.alert('操作提示','请选择需要设置权限的用户!','warning');
+            return;
+        }
+        var menu_pms={};
+        $('.opt_chk:checked').each(function(){
+            var pid=$(this).attr('pid');
+            var arr=$(this).attr('id').split('-');
+            var menu_id=arr[1];
+            var pms_key=arr[2];
+            if(pid>0 && menu_pms[pid]==undefined){
+                menu_pms[pid]="100000000";
+            }
+            if(menu_pms[menu_id]==undefined){
+                menu_pms[menu_id]="100000000";
+            }
+            menu_pms[menu_id]=menu_pms[menu_id].substring(0,pms_key)+'1'+menu_pms[menu_id].substring(parseInt(pms_key)+1);
+        });
+
+        $.post('<?php echo base_url('sys/pms/post?actionxm=update')?>',{user_id:cur_user_id,menu_pms:menu_pms},function(data){
+            $.messager.alert('操作提示','权限设置成功!');
+        },'json');
+    }
+    </script>
+</body>
+</html>

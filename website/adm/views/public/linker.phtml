@@ -1,0 +1,37 @@
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<title>知识产权提醒系统</title>
+<?php
+    $base_url = base_url('/static') . '/';
+?>
+<link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>css/easyui_themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>css/easyui_themes/icon.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>css/custom.css">
+<?php
+    if(isset($css)==true){
+        foreach ($css as $val){
+            echo '<link rel="stylesheet" type="text/css" href="'.$base_url.'css/'.ltrim($val,'/').'.css">'."\r\n";
+        }
+    }
+?>
+<script type="text/javascript" src="<?php echo $base_url;?>js/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url;?>js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url;?>js/jquery.easyui.lang.cn.js"></script>
+<script type="text/javascript" src="<?php echo $base_url;?>js/common.js"></script>
+<script type="text/javascript" src="<?php echo $base_url;?>js/doT.min.js"></script>
+<script type="text/javascript" src="<?php echo $base_url;?>js/constant.js"></script>
+<?php
+    if(isset($js)==true){
+        foreach ($js as $val){
+            echo '<script type="text/javascript" src="'.$base_url.'js/'.ltrim($val,'/').'.js"></script>'."\r\n";
+        }
+    }
+?>
+<script type="text/javascript">
+var $Global={
+};
+var _g = new Array(
+);
+_g['username'] = "<?php echo $this->session->userdata('user_name'); ?>";
+_g['userid'] = "<?php echo $this->session->userdata('user_id'); ?>";
+//console.log(_g);
+</script>

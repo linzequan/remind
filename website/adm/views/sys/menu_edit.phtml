@@ -1,0 +1,39 @@
+<div id="dlg-edit" class="easyui-dialog" style="width:400px;height:260px;padding:10px 20px"
+    closed="true" modal="true" buttons="#dlg-edit-buttons" title="编辑表单">
+    <form id="fm-edit" method="post" action="<?php echo base_url('sys/menu/post')?>" novalidate>
+        <input type="hidden" name="actionxm" value="">
+        <table class="fm-table" cellpadding="4px">
+            <colgroup>
+                <col width="80px" /><col width="*" />
+            </colgroup>
+            <tr>
+                <td>菜单ID:</td>
+                <td><input class="text" name="menu_id" value="" readonly></td>
+            </tr>
+            <tr>
+                <td>上级菜单:</td>
+                <td>
+                    <select name="pid" id="combo_pmenu">
+                        <option value="0">---无---</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>菜单标题:</td>
+                <td><input class="text" name="title" value="" required="true"></td>
+            </tr>
+            <tr>
+                <td>控制器名:</td>
+                <td><input class="text" name="ctrl_name" required="true"></td>
+            </tr>
+            <tr>
+                <td>排序:</td>
+                <td><input class="text" name="sort" value="0" required="true"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div id="dlg-edit-buttons">
+    <button class="easyui-linkbutton w90" iconCls="icon-ok" onclick="do_save()">确定</button>
+    <button class="easyui-linkbutton w90" iconCls="icon-cancel" onclick="javascript:$('#dlg-edit').dialog('close')">取消</button>
+</div>

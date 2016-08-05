@@ -1,0 +1,88 @@
+/*
+ * 基本样式
+ */
+
+/* Reset
+ * ------------------------- */
+/*basic*/
+html,body{height:100%}
+body,h1,h2,h3,h4,h5,h6,p,ul,ol,dl,dd,figure,button{margin:0}
+/*inline*/
+img{border:none;-ms-interpolation-mode:bicubic}
+a:focus,img:focus,button:focus,input:focus,div:focus,ul:focus,article:focus,body:focus,button{outline:none}
+h1,h2,h3,h4,h5,h6{font-size:14px;font-weight:normal}
+/*form*/
+button::-moz-focus-inner{border:none}
+/*lists*/
+menu,ul,ol,dd{padding-left:0;list-style:none}
+/*other*/
+object,dt{display:block}
+
+/* Default
+ * ------------------------- */
+body{background-color:#FFFFFF; font:12px "微软雅黑","SimSun","宋体","Arial Narrow",HELVETICA;color:#333333;}
+a{color:#505050;text-decoration:none}
+a,i,b,span,label{display:inline-block;vertical-align:middle;}
+
+input:hover,select:hover,textarea:hover{border-color:#aaa}
+input:focus,select:focus,textarea:focus{background:#fefcf7}
+
+input,select,textarea{border:1px solid #ccc;vertical-align:middle;}
+textarea{overflow:auto;resize:none}
+:before,:after{display:inline-block;position:absolute;font-size:0;vertical-align:middle}
+iframe{border:none;overflow:hidden}
+img{visibility:hidden}
+img[src]{visibility:inherit}
+/*进度条*/
+progress{background:transparent}
+progress::-webkit-progress-bar{background:#e6e6e6}
+progress::-webkit-progress-value{background:#0095ea}
+
+/* Library ------------------------- */
+/*文本不可选*/
+.enselect{-moz-user-select:text;-webkit-user-select:text;-o-user-select:text;user-select:text}
+.unselect{-moz-user-select:none;-webkit-user-select:none;-o-user-select:none;user-select:none}
+/*文字省略*/
+.ellipsis{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
+/*隐藏*/
+.h{visibility:hidden}
+.n{display:none}
+/*显示*/
+.i{display:inline}
+.t{display:table}
+.b{display:block}
+.ib{display:inline-block}
+/*溢出*/
+.oh{overflow:hidden}
+.ov{overflow:visible}
+/*定位*/
+.pf{position:fixed}
+.pa{position:absolute}
+.pr{position:relative}
+/*盒模型*/
+.bb{box-sizing:border-box;-moz-box-sizing:border-box;-ms-box-sizing:border-box}
+/*浮动*/
+.fl{display:inline-block;float:left}
+.fr{display:inline-block;float:right}
+/*清除浮动*/
+.clear:after{content:'clear';display:block;position:static;clear:both}
+/*尺寸*/
+.w0{width:0}
+.h0{height:0}
+.w100{width:100%}
+.h100{height:100%}
+/*文本*/
+.tn{font-size:0}
+.tc{text-align:center}
+.tl{text-align:left}
+.tr{text-align:right}
+/*单行*/
+.nowrap{white-space:nowrap}
+/*垂直*/
+.vt{vertical-align:top}
+.vm{vertical-align:middle}
+.vb{vertical-align:bottom}
+.vm-holder{display:inline-block;width:0;height:100%;font:0/0 arial;overflow:hidden;vertical-align:middle}
+/*鼠标*/
+.cd{cursor:default}
+.cp{cursor:pointer}

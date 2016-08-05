@@ -1,0 +1,55 @@
+html,body{width:100%;height:100%;margin:0;}
+a{text-decoration:none;}
+div,p{margin:0;padding:0;}
+/* extend icon.css*/
+.icon-home{
+	background:url('icons/lock.png') no-repeat center center;
+}
+/* extend easyui.css*/
+/*.panel-body{
+	overflow:hidden;
+}*/
+.tree-folder{
+	background:url('../img/tree/folder.jpg') no-repeat 0 4px;
+}
+.tree-folder-open{
+	background:url('../img/tree/folder-open.jpg') no-repeat 0 4px;
+}
+.tree-file{
+	background:url('../img/tree/file.jpg') no-repeat center center;
+}
+.tree-expanded,
+.tree-expanded-hover{background-position:-18px 2px;}
+.tree-collapsed,
+.tree-collapsed-hover{background-position:0 2px;}
+.tree-node,
+.tree-node span{height:22px;line-height:22px;}
+.tree-node span{display:inline-block;}
+
+/* datagrid */
+/*
+.datagrid-toolbar{overflow:hidden;text-align:right}
+.datagrid-toolbar table{float:right;}
+*/
+.dg-detail table{width:100%;border:none;border-collapse:collapse;}
+.dg-detail td{padding:6px 10px;border-bottom:1px solid #DDD;border-right:1px solid #DDD;}
+.dg-detail td.label{text-align:right;text-weight:bold;}
+
+/*表单布局样式*/
+.fm-table{
+	width:100%;
+	border:none;
+	border-collapse:collapse;
+	font-size:12px;
+}
+.fm-table td.label{line-height:24px;text-align:right;vertical-align:top;font-weight:bold}
+.fm-table td.label_l{line-height:24px;text-align:left;vertical-align:top;font-weight:bold}
+.fm-table tr{margin-bottom:5px;}
+.fm-table input.text{width:98%;padding:0;margin:0;height:20px;line-height:20px;}
+.fm-table select{width:98%;padding:0;margin:0;height:22px;line-height:22px;}
+.fm-table textarea{width:100%;padding:0;margin:0;line-height:20px;}
+
+.fm-table .checkbox,
+.fm-table .checkfor{vertical-align:middle;}
+
+.w90{width:90px;}

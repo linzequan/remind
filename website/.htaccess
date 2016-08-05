@@ -1,0 +1,4 @@
+RewriteEngine on
+RewriteCond %{REQUEST_URI} !^/adm/ [NC]
+RewriteCond %{REQUEST_FILENAME} !^.*\.(gif|jpg|jpeg|png|swf|css|js|txt|ico|xml|cur|ani|mp3|htc)$ [NC]
+RewriteRule ^(.*)$ index.php [L]

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <?php
+        $this->load->view('/public/linker',array(
+            'css'=>array(),
+            'js' =>array(),
+        ));
+    ?>
+</head>
+<body>
+    <table id="dg" class="easyui-datagrid" title="系统用户管理"
+           fit="true" border="false" plain="true"
+           url="<?php echo base_url('sys/user/get?actionxm=search')?>" queryParams="{actionxm:'search'}" method="post"
+           toolbar="#toolbar" multiSort="true"
+           rownumbers="false" pagination="true" pageList="[50,100,150,200]" pageSize="50"
+           singleSelect="true" remote>
+        <thead>
+            <tr>
+                <th data-options="sortable:true,field:'user_id',width:80">会员ID</th>
+                <th data-options="sortable:true,field:'user_name',width:120">会员账号</th>
+                <th data-options="sortable:true,field:'true_name',width:120">真实姓名</th>
+                <th data-options="sortable:true,field:'is_admin',width:100,align:'left'">是否管理员</th>
+                <th data-options="sortable:true,field:'create_uname',width:120">创建账号</th>
+                <th data-options="sortable:true,field:'create_time',width:200">创建时间</th>
+            </tr>
+        </thead>
+    </table>
+
+    <div id="toolbar">
+        <button class="easyui-linkbutton" iconCls="icon-add"    plain="true" onclick="open_insert()">添加</button>
+        <button class="easyui-linkbutton" iconCls="icon-cancel" plain="true" onclick="do_delete()">删除</button>
+        <button class="easyui-linkbutton" iconCls="icon-edit"   plain="true" onclick="open_update()">修改</button>
+        <button class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="open_search()">查询</button>
+    </div>
+
+    <?php $this->load->view('sys/user_search');?>
+
+    <?php $this->load->view('sys/user_edit');?>
+
+    <script type="text/javascript">
+
+    /*查询操作*/
+    function open_search() {
+        $('#dlg-search').dialog('open');
+    }
+
+    function do_search() {
+        var fm_data=$('#fm-search').form('getData');
+        $('#dg').datagrid('options').queryParams = {actionxm:'search', rs:fm_data};
+        $('#dg').datagrid('reload');
+    }
+
+    /*添加 和 修改操作*/
+    function open_insert() {
+        $('#fm-edit').form('clear').form('load', {actionxm:'insert', user_id:'系统编号', is_admin:0});
+        $('#dlg-edit').dialog('setTitle', '用户添加').dialog('open');
+    }
+
+    function open_update() {
+        var info=$('#dg').datagrid('getSelected');
+        if(info==null) {
+            $.messager.alert('操作提示', '请选择需要编辑的用户!', 'warning');
+            return;
+        }
+        var fm_data = {
+                actionxm    :'update',
+                user_id     :info.user_id,
+                user_name   :info.user_name,
+                true_name   :info.true_name,
+                is_admin    :info.is_admin,
+                pwd         :'not-pwd'
+        };
+        $('#fm-edit').form('load', fm_data);
+        $('#dlg-edit').dialog('setTitle', '用户编辑').dialog('open');
+    }
+
+    function do_save() {
+        $('#fm-edit').form('submit', {
+            onSubmit: function() {
+                return $(this).form('validate');
+            },
+            success: function(result) {
+                var result = eval('('+result+')');
+                if (result.success==false) {
+                    $.messager.alert('操作提示', result.data,'warning');
+                } else {
+                    $('#dlg-edit').dialog('close');
+                    $('#dg').datagrid('reload');
+                }
+            }
+        });
+    }
+
+    /*删除操作*/
+    function do_delete() {
+        var info = $('#dg').datagrid('getSelected');
+        if(info==null) {
+            $.messager.alert('操作提示', '请选择需要删除的用户!', 'warning');
+            return;
+        }
+        $.messager.confirm('操作提示', '你确定要删除此系统用户吗?', function(r) {
+            if (r) {
+                $.post('<?php echo base_url('sys/user/post')?>', {user_id: info.user_id, actionxm:'delete'}, function(result) {
+                    if (result.success) {
+                        $('#dg').datagrid('reload');
+                    } else {
+                        $.messager.alert('操作提示', '删除成功');
+                    }
+                }, 'json');
+            }
+        });
+    }
+    </script>
+</body>
+</html>
