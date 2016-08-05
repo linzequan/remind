@@ -77,8 +77,8 @@ CREATE TABLE IF NOT EXISTS `sys_user` (
 -- 转存表中的数据 `sys_user`
 --
 
-INSERT INTO `sys_user` (`user_id`, `user_name`, `true_name`, `email`, `uposition`, `pwd`, `is_admin`, `is_del`, `create_uname`, `create_time`) VALUES
-(1, 'admin', '超级管理员', '', '系统管理员', '9e3763ebc7a147d2a27222b763d7bd37', 1, 0, 'admin', '2016-07-04 14:18:07');
+INSERT INTO `sys_user` (`user_id`, `user_name`, `true_name`, `email`, `pwd`, `is_admin`, `is_del`, `create_uname`, `create_time`) VALUES
+(1, 'admin', '超级管理员', '', '9e3763ebc7a147d2a27222b763d7bd37', 1, 0, 'admin', '2016-07-04 14:18:07');
 
 -- --------------------------------------------------------
 
