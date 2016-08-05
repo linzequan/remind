@@ -1,5 +1,9 @@
 # INSTALL
 
+## Add domain resolution
+
+Edit `/etc/hosts`, add new line `127.0.0.1 dev.remind.com` with administator rights.
+
 ## Init Database
 
 - create database user `remind`
@@ -9,7 +13,6 @@ Reference `docs/db/create_db_user.sql`. Login MySQL command line first, then run
 ```
 create user 'remind'@'%' identified by '123456';
 grant all on remind.* to 'remind'@'%';
-
 ```
 
 - import init sql
